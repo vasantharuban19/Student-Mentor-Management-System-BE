@@ -84,11 +84,11 @@ const editStudent = async (req, res)=>{
       if(student){
         const students =  await StudentModel.updateOne({_id: req.params.id},{$set:req.body})
         res.status(200).send({
-          message: "User Edite Successfully",
+          message: "student Edited Successfully",
         });
       }else{
         res.status(400).send({
-          message: "Invalid User Id"
+          message: "Invalid student Id"
         });
       }
   } catch (error) {
