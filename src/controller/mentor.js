@@ -1,7 +1,7 @@
 import MentorModel from "../module/mentor.js";
 import StudentModel from "../module/student.js";
-import dotenv from 'dotenv'
-dotenv.config()
+import dotenv from "dotenv";
+dotenv.config();
 
 const allMentor = async (req, res) => {
   try {
@@ -26,7 +26,7 @@ const addMentor = async (req, res) => {
       let newMentor = await MentorModel.create(req.body);
       res.status(200).send({
         message: "Mentor Added Successfully",
-        newMentor
+        newMentor,
       });
     } else {
       res.status(400).send({
@@ -88,18 +88,21 @@ const addBatch = async (req, res) => {
   try {
     const id = req.params.id;
     const batch = req.params.batch;
-  const findBatch = await MentorModel.findOne({batch:{$all: [batch]}})
-  if(!findBatch){
-    res.status(200).send({
-      message: "updated",
-    });
-  }else{
-    res.status(400).send({
-      message: `Batch with ${batch} already exists`
-    })
-  }
+    const findBatch = await MentorModel.findOne({ batch: { $all: [batch] } });
+    if (!findBatch) {
+      res.status(200).send({
+        message: "updated",
+      });
+    } else {
+      res.status(400).send({
+        message: `Batch with ${batch} already exists`,
+      });
+    }
 
-   await MentorModel.updateOne({_id: req.params.id}, { $push: { batch: batchs } })
+    await MentorModel.updateOne(
+      { _id: req.params.id },
+      { $push: { batch: batch } }
+    );
 
     // console.log(id, batch);
   } catch (error) {
@@ -109,36 +112,34 @@ const addBatch = async (req, res) => {
   }
 };
 
-const editMentor = async (req, res) =>{
+const editMentor = async (req, res) => {
   try {
-   let mentor =  await MentorModel.find({_id: req.params.id})
-   if(mentor){
-    await MentorModel.updateOne({_id:req.params.id},{$set:req.body})
-    res.status(200).send({
-     message :  "update mentor"
-    })
-   }else{
-    res.status(400).send({
-      message :  "Invalid mento id"
-     })
-   }
-
-  } catch (error) {
-      res.status(500).send({
-        message: "Internal server Error",
+    let mentor = await MentorModel.find({ _id: req.params.id });
+    if (mentor) {
+      await MentorModel.updateOne({ _id: req.params.id }, { $set: req.body });
+      res.status(200).send({
+        message: "Mentor Update Succefully",
       });
+    } else {
+      res.status(400).send({
+        message: "Invalid mento id",
+      });
+    }
+  } catch (error) {
+    res.status(500).send({
+      message: "Internal server Error",
+    });
   }
-}
-
+};
 
 const getOneMentor = async (req, res) => {
   try {
     const mentors = MentorModel.findOne({ _id: req.params.id });
     if (mentors) {
-     const mentor = await MentorModel.findOne({ _id: req.params.id });
+      const mentor = await MentorModel.findOne({ _id: req.params.id });
       res.status(200).send({
         message: "Mentor data fetched Successfully",
-        mentor
+        mentor,
       });
     } else {
       res.status(400).send({
@@ -159,5 +160,5 @@ export default {
   mentorStudentList,
   addBatch,
   editMentor,
-  getOneMentor
+  getOneMentor,
 };
