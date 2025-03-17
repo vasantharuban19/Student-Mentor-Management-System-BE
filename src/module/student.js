@@ -1,4 +1,4 @@
-import mongoose from "./index.js";
+import mongoose from "mongoose";
 
 const validateEmail = (email) => {
   return String(email)
@@ -29,7 +29,7 @@ const studentSchema = new mongoose.Schema(
     batch: {
       type: String,
       required: [true, "Batch is required"],
-    }
+    },
   },
   {
     collection: "student",
@@ -38,6 +38,5 @@ const studentSchema = new mongoose.Schema(
 );
 
 const StudentModel = mongoose.model("student", studentSchema);
-
 
 export default StudentModel;
